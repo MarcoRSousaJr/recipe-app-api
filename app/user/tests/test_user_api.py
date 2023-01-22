@@ -9,11 +9,13 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 
-CREATUE_USER_URL = reverse('user:create')
+CREATE_USER_API = reverse('user:create')
+
 
 def create_user(**params):
     """Create and return a new user."""
     return get_user_model().objects.create_user(**params)
+
 
 class PublicUserApiTests(TestCase):
     """Test the public features of the user API."""
@@ -40,7 +42,7 @@ class PublicUserApiTests(TestCase):
         payload = {
             'email': 'test@example.com',
             'password': 'testpass123',
-            'name': 'Test Name'
+            'name': 'Test name',
         }
         create_user(**payload)
         res = self.client.post(CREATE_USER_URL, payload)
@@ -57,7 +59,7 @@ class PublicUserApiTests(TestCase):
         res = self.client.post(CREATE_USER_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        user_exists = get_user_model.objects.filter(
+        user_exists = get_user_model().objects.filter(
             email=payload['email']
         ).exists()
         self.assertFalse(user_exists)
